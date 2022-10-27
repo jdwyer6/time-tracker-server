@@ -15,7 +15,7 @@ require("dotenv").config();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ 
-    origin: "*",
+    origin: "https://clocked-in.netlify.app/",
     // methods: ['GET', 'POST', 'PUT', 'DELETE'],
     // credentials: true
 }))
