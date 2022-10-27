@@ -208,8 +208,6 @@ app.get("/profile", validateToken, (req, res) => {
 })
 
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 3001, () => {
     console.log("Server is running on port 3001")
 })
-
-// || 3001
