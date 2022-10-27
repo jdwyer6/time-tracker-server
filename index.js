@@ -9,12 +9,18 @@ const {createTokens, validateToken} = require('./JWT');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const { current } = require("@reduxjs/toolkit");
+const cors = require('cors');
 require("dotenv").config();
 
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(cors({ 
+    origin: "*",
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}))
 
 mongoose.connect('mongodb+srv://jdwyer6:hpYOr45SNY9s8jxq@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority')
 
@@ -204,6 +210,8 @@ app.get("/profile", validateToken, (req, res) => {
 })
 
 
-app.listen(process.env.PORT || 3001, () => {
+app.listen(process.env.PORT, () => {
     console.log("Server is running on port 3001")
 })
+
+// || 3001
