@@ -70,7 +70,7 @@ app.post("/register", (req, res) => {
 
 });
 
-app.post("/login", async (req, res, next) => {
+app.post("/login", cors(), async (req, res, next) => {
     const {username, password} = req.body;
     try{
         const user = await Users.findOne({username: username})
