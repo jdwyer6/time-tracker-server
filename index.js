@@ -6,7 +6,6 @@ const Users = require('./models/Users');
 const bcrypt = require('bcrypt');
 const cookieParser = require("cookie-parser");
 const {createTokens, validateToken} = require('./JWT');
-const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const { current } = require("@reduxjs/toolkit");
 const cors = require('cors');
@@ -15,11 +14,10 @@ require("dotenv").config();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
 app.use(cors({ 
     origin: "*",
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
+    // methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    // credentials: true
 }))
 
 mongoose.connect('mongodb+srv://jdwyer6:hpYOr45SNY9s8jxq@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority')
