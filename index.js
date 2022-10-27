@@ -11,11 +11,13 @@ const { v4: uuidv4 } = require('uuid');
 const { current } = require("@reduxjs/toolkit");
 require("dotenv").config();
 
-app.use(function(req, res, next){
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-Width, Content-Type, Accept");
-    next();
-});
+// app.use(function(req, res, next){
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-Width, Content-Type, Accept");
+//     next();
+// });
+
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
