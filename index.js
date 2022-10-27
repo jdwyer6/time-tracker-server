@@ -14,11 +14,7 @@ require("dotenv").config();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ 
-    origin: "https://clocked-in.netlify.app/",
-    // methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    // credentials: true
-}))
+app.use(cors());
 
 mongoose.connect('mongodb+srv://jdwyer6:hpYOr45SNY9s8jxq@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority')
 
