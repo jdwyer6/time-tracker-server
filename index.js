@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const Users = require('./models/Users');
 //hashing
-const bycrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const cookieParser = require("cookie-parser");
 const {createTokens, validateToken} = require('./JWT');
 const cors = require('cors');
@@ -47,7 +47,7 @@ app.post("/register", (req, res) => {
     Users.findOne({username: username})
     .then(userFound => {
         if(!userFound){
-            bycrypt.hash(password, 10)
+            bcrypt.hash(password, 10)
             .then((hash) => {
                 const newUser = new Users({username, password: hash, businessName});
                 newUser.save({
@@ -75,7 +75,7 @@ app.post("/login", async (req, res, next) => {
     try{
         const user = await Users.findOne({username: username})
         const dbPassword = user.password;
-        bycrypt.compare(password, dbPassword).then((match) => {
+        bcrypt.compare(password, dbPassword).then((match) => {
             if(!match){
                 res.status(400).json({error: "Oops...wrong username and password."})
                 console.log('no password')
