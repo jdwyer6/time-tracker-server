@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-mongoose.connect('mongodb+srv://jdwyer6:hpYOr45SNY9s8jxq@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority')
+mongoose.connect(`mongodb+srv://${process.env.user}:${process.env.password}@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority`)
 
 
 app.get("/getUsers", (req, res) => {
