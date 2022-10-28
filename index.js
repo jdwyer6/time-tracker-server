@@ -24,9 +24,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-
 mongoose.connect(`mongodb+srv://${process.env.user}:${process.env.password}@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority`)
-
 
 app.get("/getUsers", (req, res) => {
     Users.find({}, (err, result) => {
