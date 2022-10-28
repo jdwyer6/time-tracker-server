@@ -11,6 +11,11 @@ const { v4: uuidv4 } = require('uuid');
 const { current } = require("@reduxjs/toolkit");
 require("dotenv").config();
 
+const dbInfo = {
+    username: process.env.user,
+    password: process.env.password
+}
+
 // app.use(function(req, res, next){
 //     res.header("Access-Control-Allow-Origin", "*");
 //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-Width, Content-Type, Accept");
@@ -24,7 +29,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-mongoose.connect(`mongodb+srv://${process.env.user}:${process.env.password}@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://${dbInfo.username}:${dbInfo.password}@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority`)
 
 app.get("/getUsers", (req, res) => {
     Users.find({}, (err, result) => {
