@@ -45,7 +45,11 @@ app.get('/user/:id', function(req, res){
         if(!userFound) { return res.status(404).end(); }
         return res.status(200).json(userFound)
     })
-    .catch(err => next(err));
+    .catch((err) => {
+        if(err){
+            res.status(400).json({error: err});
+        }
+    })
 })
 
 
