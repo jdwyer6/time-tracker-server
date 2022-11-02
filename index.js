@@ -82,9 +82,11 @@ app.post('/user/:id', function(req, res, next){
     })
 })
 
-app.put('/user/:id/:jobId', function(req, res, next){
+app.post('/user/:id/:status', function(req, res, next){
     Users.findById(req.params.id)
     .then(user => {
+        user.clockedIn = req.params.status
+        user.save();
         res.statusCode=200;
         res.setHeader('Content-Type', 'application/json');
         res.json(user)
