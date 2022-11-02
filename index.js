@@ -68,7 +68,7 @@ app.post("/register", (req, res) => {
         if(!userFound){
             bcrypt.hash(password, 10)
             .then((hash) => {
-                const newUser = new Users({username, password: hash, businessName});
+                const newUser = new Users({username, password: hash, businessName, businessId, name, admin});
                 newUser.save({
                     username: username,
                     password: hash,
