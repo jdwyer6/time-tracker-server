@@ -61,6 +61,7 @@ app.post('/user/:id', function(req, res, next){
     .then(user => {
         if(user){
             user.hours.push(info)
+            user.lastLoggedInfo = info;
             user.save()
             .then(user => {
                 res.statusCode = 200;
@@ -124,7 +125,6 @@ app.post("/register", (req, res) => {
                     lastLoggedInfo: lastLoggedInfo
                 }).then(() => {
                     res.json("USER REGISTERED")
-                    console.log(newUser)
                 })
             })
         }else{

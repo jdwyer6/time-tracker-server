@@ -57,7 +57,7 @@ const UserSchema = new mongoose.Schema({
         type: Boolean
     },
     lastLoggedInfo: {
-        type: Array
+        type: Object
     }
 },{
     timestamps: true
