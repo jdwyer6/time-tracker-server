@@ -64,8 +64,7 @@ app.post("/register", (req, res) => {
     const name = req.body.name;
     const admin = req.body.admin;
     const image = req.body.image;
-    Users.findOne({username: username})
-    console.log(password, username, businessName, businessId, name, admin, image)
+    Users.collection.findOne({username: username})
     .then(userFound => {
         if(!userFound){
             bcrypt.hash(password, 10)
