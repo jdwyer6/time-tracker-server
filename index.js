@@ -82,6 +82,7 @@ app.post('/user/:id', function(req, res, next){
     })
 })
 
+
 app.post('/user/:id/:status', function(req, res, next){
     Users.findById(req.params.id)
     .then(user => {
