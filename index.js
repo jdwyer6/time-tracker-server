@@ -104,13 +104,14 @@ app.post("/register", (req, res) => {
     const name = req.body.name;
     const admin = req.body.admin;
     const image = req.body.image;
-    const clockedIn = req.body.clockedIn;
+    const clockedIn = false;
+    const lastLoggedInfo = [];
     Users.collection.findOne({username: username})
     .then(userFound => {
         if(!userFound){
             bcrypt.hash(password, 10)
             .then((hash) => {
-                const newUser = new Users({username, password: hash, businessName, businessId, name, admin, image, clockedIn});
+                const newUser = new Users({username, password: hash, businessName, businessId, name, admin, image, clockedIn, lastLoggedInfo});
                 newUser.save({
                     username: username,
                     password: hash,
@@ -119,9 +120,11 @@ app.post("/register", (req, res) => {
                     businessId: businessId,
                     admin: admin,
                     image: image,
-                    clockedIn: clockedIn
+                    clockedIn: clockedIn,
+                    lastLoggedInfo: lastLoggedInfo
                 }).then(() => {
                     res.json("USER REGISTERED")
+                    console.log(newUser)
                 })
             })
         }else{
@@ -133,7 +136,6 @@ app.post("/register", (req, res) => {
             res.status(400).json({error: err});
         }
     })
-
 });
 
 app.post("/login", async (req, res, next) => {

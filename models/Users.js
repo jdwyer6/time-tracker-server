@@ -52,6 +52,12 @@ const UserSchema = new mongoose.Schema({
     },
     hours: {
         type: Array
+    },
+    clockedIn: {
+        type: Boolean
+    },
+    lastLoggedInfo: {
+        type: Array
     }
 },{
     timestamps: true
