@@ -1,7 +1,7 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require('cors');
 const app = express();
-require("dotenv").config();
 const mongoose = require('mongoose');
 const Users = require('./models/Users');
 const bcrypt = require('bcrypt');
@@ -60,6 +60,9 @@ app.post("/register", (req, res) => {
     const password = req.body.password;
     const username = req.body.username;
     const businessName = req.body.businessName;
+    const businessId = uuidv4();
+    const name = req.body.name;
+    const admin = req.body.admin;
     Users.findOne({username: username})
     .then(userFound => {
         if(!userFound){
@@ -69,7 +72,10 @@ app.post("/register", (req, res) => {
                 newUser.save({
                     username: username,
                     password: hash,
-                    businessName: businessName
+                    name: name,
+                    businessName: businessName,
+                    businessId: businessId,
+                    admin: admin
                 }).then(() => {
                     res.json("USER REGISTERED")
                 })

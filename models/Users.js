@@ -1,24 +1,24 @@
 const mongoose = require('mongoose');
 
-const EmployeeSchema = new mongoose.Schema({
-    employeeId:{
-        type: String
-    },
-    name: {
-        type: String,
-    },
-    pin: {
-        type: String,
-        required: true
-    },
-    img: {
-        data: Buffer,
-        type: Array
-    },
-    work: {
-        type: Array
-    }
-})
+// const EmployeeSchema = new mongoose.Schema({
+//     employeeId:{
+//         type: String
+//     },
+//     name: {
+//         type: String,
+//     },
+//     pin: {
+//         type: String,
+//         required: true
+//     },
+//     img: {
+//         data: Buffer,
+//         type: Array
+//     },
+//     work: {
+//         type: Array
+//     }
+// })
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -29,11 +29,30 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    admin: {
+        type: Boolean,
+    },
+    name: {
+        type: String,
+        required: true
+    },
     businessName: {
         type: String,
         required: true
     },
-    employees: [EmployeeSchema]
+    businessId: {
+        type: String,
+        required: true
+    },
+    demo: {
+        type: Boolean,
+    },
+    image: {
+        type: String
+    },
+    hours: {
+        type: Array
+    }
 },{
     timestamps: true
 });
