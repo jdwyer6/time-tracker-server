@@ -63,19 +63,22 @@ app.post("/register", (req, res) => {
     const businessId = uuidv4();
     const name = req.body.name;
     const admin = req.body.admin;
+    const image = req.body.image;
     Users.findOne({username: username})
+    console.log(password, username, businessName, businessId, name, admin, image)
     .then(userFound => {
         if(!userFound){
             bcrypt.hash(password, 10)
             .then((hash) => {
-                const newUser = new Users({username, password: hash, businessName, businessId, name, admin});
+                const newUser = new Users({username, password: hash, businessName, businessId, name, admin, image});
                 newUser.save({
                     username: username,
                     password: hash,
                     name: name,
                     businessName: businessName,
                     businessId: businessId,
-                    admin: admin
+                    admin: admin,
+                    image: image
                 }).then(() => {
                     res.json("USER REGISTERED")
                 })
