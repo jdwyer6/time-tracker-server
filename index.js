@@ -57,7 +57,6 @@ app.get('/user/:id', function(req, res){
 
 app.post('/user/:id', function(req, res, next){
     const info = req.body;
-    console.log(info)
     Users.findById(req.params.id)
     .then(user => {
         if(user){
@@ -70,10 +69,24 @@ app.post('/user/:id', function(req, res, next){
             })
             .catch(err => next(err));
         }else{
-            err = new Error(`Could not update the comployee with id ${user.id}`);
+            err = new Error(`Could not update the employee with id ${user.id}`);
             err.status = 404;
             return next(err);
         }
+    })
+    .catch((err) => {
+        if(err){
+            res.status(400).json({error: err});
+        }
+    })
+})
+
+app.put('/user/:id/:jobId', function(req, res, next){
+    Users.findById(req.params.id)
+    .then(user => {
+        res.statusCode=200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(user)
     })
     .catch((err) => {
         if(err){
@@ -91,12 +104,13 @@ app.post("/register", (req, res) => {
     const name = req.body.name;
     const admin = req.body.admin;
     const image = req.body.image;
+    const clockedIn = req.body.clockedIn;
     Users.collection.findOne({username: username})
     .then(userFound => {
         if(!userFound){
             bcrypt.hash(password, 10)
             .then((hash) => {
-                const newUser = new Users({username, password: hash, businessName, businessId, name, admin, image});
+                const newUser = new Users({username, password: hash, businessName, businessId, name, admin, image, clockedIn});
                 newUser.save({
                     username: username,
                     password: hash,
@@ -104,7 +118,8 @@ app.post("/register", (req, res) => {
                     businessName: businessName,
                     businessId: businessId,
                     admin: admin,
-                    image: image
+                    image: image,
+                    clockedIn: clockedIn
                 }).then(() => {
                     res.json("USER REGISTERED")
                 })
