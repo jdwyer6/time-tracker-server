@@ -55,6 +55,33 @@ app.get('/user/:id', function(req, res){
     })
 })
 
+app.post('/user/:id', function(req, res, next){
+    const info = req.body;
+    console.log(info)
+    Users.findById(req.params.id)
+    .then(user => {
+        if(user){
+            user.hours.push(info)
+            user.save()
+            .then(user => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user)
+            })
+            .catch(err => next(err));
+        }else{
+            err = new Error(`Could not update the comployee with id ${user.id}`);
+            err.status = 404;
+            return next(err);
+        }
+    })
+    .catch((err) => {
+        if(err){
+            res.status(400).json({error: err});
+        }
+    })
+})
+
 
 app.post("/register", (req, res) => {
     const password = req.body.password;
