@@ -99,7 +99,6 @@ app.post('/user/:id/:status', function(req, res, next){
     })
 })
 
-
 app.post("/register", (req, res) => {
     const password = req.body.password;
     const username = req.body.username;
