@@ -123,7 +123,7 @@ app.post("/register", (req, res) => {
     const admin = req.body.admin;
     const image = req.body.image;
     const clockedIn = false;
-    const lastLoggedInfo = [];
+    const lastLoggedInfo = 0;
     const position = req.body.position;
     Users.collection.findOne({username: username})
     .then(userFound => {
