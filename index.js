@@ -57,13 +57,10 @@ app.get('/user/:id', function(req, res){
 
 app.post('/user/:id', function(req, res, next){
     const info = req.body;
-    const lastLoggedInfo = req.body.lastLoggedInfo
     Users.findById(req.params.id)
     .then(user => {
         if(user){
             user.hours.push(info)
-            user.lastLoggedInfo = lastLoggedInfo;
-            console.log(lastLoggedInfo)
             user.save()
             .then(user => {
                 res.statusCode = 200;
@@ -76,6 +73,22 @@ app.post('/user/:id', function(req, res, next){
             err.status = 404;
             return next(err);
         }
+    })
+    .catch((err) => {
+        if(err){
+            res.status(400).json({error: err});
+        }
+    })
+})
+
+app.post('/user/:id/:lastLoggedInfo', function(req, res, next){
+    Users.findById(req.params.id)
+    .then(user => {
+        user.lastLoggedInfo = req.params.lastLoggedInfo
+        user.save();
+        res.statusCode=200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(user)
     })
     .catch((err) => {
         if(err){
