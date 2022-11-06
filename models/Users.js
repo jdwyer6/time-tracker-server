@@ -56,7 +56,7 @@ const UserSchema = new mongoose.Schema({
         type: Boolean
     },
     lastLoggedInfo: {
-        type: String
+        type: Number
     },
     position: {
         type: String
