@@ -57,11 +57,13 @@ app.get('/user/:id', function(req, res){
 
 app.post('/user/:id', function(req, res, next){
     const info = req.body;
+    const lastLoggedInfo = req.body.lastLoggedInfo
     Users.findById(req.params.id)
     .then(user => {
         if(user){
             user.hours.push(info)
-            user.lastLoggedInfo = info;
+            user.lastLoggedInfo = lastLoggedInfo;
+            console.log(lastLoggedInfo)
             user.save()
             .then(user => {
                 res.statusCode = 200;
