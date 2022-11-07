@@ -56,13 +56,13 @@ app.get('/user/:id', function(req, res){
 })
 
 app.post('/user/:id', function(req, res, next){
-    const info = req.body.info;
+    const data = req.body.data;
     const currentlyClockedIn = req.body.currentlyClockedIn;
     Users.findById(req.params.id)
     .then(user => {
         if(user){
             user.clockedIn = currentlyClockedIn
-            user.hours.push(info)
+            user.hours.push(data)
             user.save()
             .then(user => {
                 res.statusCode = 200;
@@ -84,12 +84,12 @@ app.post('/user/:id', function(req, res, next){
 })
 
 app.put('/user/:id', function(req, res, next){
-    const info = req.body.info;
+    const data = req.body.data;
 
     Users.findById(req.params.id)
     .then(user => {
         if(user){
-            const update = {...user.hours.at(-1), ...info};
+            const update = {...user.hours.at(-1), ...data};
             const data = user.hours.at(-1);
             user.hours.splice(-1, 1, update)
             user.clockedIn = false
