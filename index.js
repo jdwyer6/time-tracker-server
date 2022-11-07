@@ -90,7 +90,6 @@ app.put('/user/:id', function(req, res, next){
     .then(user => {
         if(user){
             const update = {...user.hours.at(-1), ...data};
-            const data = user.hours.at(-1);
             user.hours.splice(-1, 1, update)
             user.clockedIn = false
             user.save()
