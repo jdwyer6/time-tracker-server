@@ -53,7 +53,7 @@ const UserSchema = new mongoose.Schema({
         type: Array
     },
     clockedIn: {
-        type: Boolean
+        type: String
     },
     lastLoggedInfo: {
         type: Number
