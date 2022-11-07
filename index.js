@@ -56,10 +56,12 @@ app.get('/user/:id', function(req, res){
 })
 
 app.post('/user/:id', function(req, res, next){
-    const info = req.body;
+    const info = req.body.info;
+    const currentlyClockedIn = req.body.currentlyClockedIn;
     Users.findById(req.params.id)
     .then(user => {
         if(user){
+            user.clockedIn = currentlyClockedIn
             user.hours.push(info)
             user.save()
             .then(user => {
@@ -81,14 +83,28 @@ app.post('/user/:id', function(req, res, next){
     })
 })
 
-app.post('/user/:id/:lastLoggedInfo', function(req, res, next){
+app.put('/user/:id', function(req, res, next){
+    const info = req.body.info;
+
     Users.findById(req.params.id)
     .then(user => {
-        user.lastLoggedInfo = req.params.lastLoggedInfo
-        user.save();
-        res.statusCode=200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(user)
+        if(user){
+            const update = {...user.hours.at(-1), ...info};
+            const data = user.hours.at(-1);
+            user.hours.splice(-1, 1, update)
+            user.clockedIn = false
+            user.save()
+            .then(user => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user)
+            })
+            .catch(err => next(err));
+        }else{
+            err = new Error(`Could not update the employee with id ${user.id}`);
+            err.status = 404;
+            return next(err);
+        }
     })
     .catch((err) => {
         if(err){
@@ -96,6 +112,22 @@ app.post('/user/:id/:lastLoggedInfo', function(req, res, next){
         }
     })
 })
+
+// app.post('/user/:id/:lastLoggedInfo', function(req, res, next){
+//     Users.findById(req.params.id)
+//     .then(user => {
+//         user.lastLoggedInfo = req.params.lastLoggedInfo
+//         user.save();
+//         res.statusCode=200;
+//         res.setHeader('Content-Type', 'application/json');
+//         res.json(user)
+//     })
+//     .catch((err) => {
+//         if(err){
+//             res.status(400).json({error: err});
+//         }
+//     })
+// })
 
 
 app.post('/user/:id/:status', function(req, res, next){
