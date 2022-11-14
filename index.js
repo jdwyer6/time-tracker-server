@@ -1,3 +1,4 @@
+//look into async/await. promises work fine but i personally prefer async/await and that's what im more familiar with (im not an expert)
 require("dotenv").config();
 const express = require("express");
 const cors = require('cors');
@@ -8,13 +9,16 @@ const bcrypt = require('bcrypt');
 const cookieParser = require("cookie-parser");
 const {createTokens, validateToken} = require('./JWT');
 const { v4: uuidv4 } = require('uuid');
+//unused
 const { current } = require("@reduxjs/toolkit");
 
-
+//unused
 const dbInfo = {
     username: process.env.user,
     password: process.env.password
 }
+
+//remove
 
 // app.use(function(req, res, next){
 //     res.header("Access-Control-Allow-Origin", "*");
@@ -22,6 +26,9 @@ const dbInfo = {
 //     next();
 // });
 
+//this is good- but make sure you understand what it's doing, since you can't always * the CORS
+//this approach is perfect for this app, don't need to change- just CORS is a good thing to learn about
+//if you already know how it works- great!
 app.use(cors({
     origin: "*",
     credentials: true
@@ -29,8 +36,10 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+//Fix with env.local / GH secrets
 mongoose.connect(`mongodb+srv://jdwyer6:hpYOr45SNY9s8jxq@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority`)
 
+//lgtm
 app.get("/getUsers", (req, res) => {
     Users.find({}, (err, result) => {
         if(err) {
@@ -52,9 +61,11 @@ app.get('/user/:id', function(req, res){
         if(err){
             res.status(400).json({error: err});
         }
+        //what happens if no err? is that possible? if it's not possible then why have if()?
     })
 })
 
+//LGTM
 app.post('/user/:id', function(req, res, next){
     const data = req.body.data;
     const currentlyClockedIn = req.body.currentlyClockedIn;
@@ -89,6 +100,7 @@ app.put('/user/:id', function(req, res, next){
     Users.findById(req.params.id)
     .then(user => {
         if(user){
+            //add a one-line comment here? i personally always find splice stuff a little hard to read
             const update = {...user.hours.at(-1), ...data};
             user.hours.splice(-1, 1, update)
             user.clockedIn = false
@@ -112,6 +124,8 @@ app.put('/user/:id', function(req, res, next){
     })
 })
 
+//remove
+
 // app.post('/user/:id/:lastLoggedInfo', function(req, res, next){
 //     Users.findById(req.params.id)
 //     .then(user => {
@@ -129,9 +143,10 @@ app.put('/user/:id', function(req, res, next){
 // })
 
 
-app.post('/user/:id/:status', function(req, res, next){
+app.post('/user/:id/:status', function(req, res, next){ //next unused
     Users.findById(req.params.id)
     .then(user => {
+        //personally i like to make things match when possible. change status param to clockedIn? not essential.
         user.clockedIn = req.params.status
         user.save();
         res.statusCode=200;
@@ -146,6 +161,8 @@ app.post('/user/:id/:status', function(req, res, next){
 })
 
 app.post("/register", (req, res) => {
+    // great opportunity for object destructuring
+    // const {password, username, businessName, ...} = req.body
     const password = req.body.password;
     const username = req.body.username;
     const businessName = req.body.businessName;
@@ -188,7 +205,9 @@ app.post("/register", (req, res) => {
     })
 });
 
-app.post("/login", async (req, res, next) => {
+//here you have async (req, res) - why the switch?
+
+app.post("/login", async (req, res, next) => { //next unused
     const {username, password} = req.body;
     try{
         const user = await Users.findOne({username: username})
@@ -215,6 +234,7 @@ app.post("/login", async (req, res, next) => {
         
 })
 
+//here you have async (req, res) - why the switch?
 
 app.post("/addEmployee", async (req, res) => {
     const {userId, name, pin, img, work} = req.body;
@@ -243,7 +263,8 @@ app.post("/addEmployee", async (req, res) => {
     })
 
 })
-
+//here you have function (req, res) - why the switch?
+//is the idea that users have employees below them and these employees have ids? hence the nested search?
 app.get('/employee/:id/:employeeId', function(req, res){
     Users.findById(req.params.id)
     .then(user => {
@@ -287,6 +308,7 @@ app.delete('/:businessId/:employeeId', (req, res) => {
         }
     })
 })
+// is this to add hours? why does it go through a seperate endpoint endpoint than delete hours?
 
 app.post('/updateEmployee/:id', function(req, res, next) {
     const {employeeId, info} = req.body;
