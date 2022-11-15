@@ -35,7 +35,7 @@ app.get("/getUsers", (req, res) => {
     })
 })
 
-
+console.log(dbInfo.username, dbInfo.password)
 app.get('/user/:id', function(req, res){
     Users.findById(req.params.id)
     .then(userFound => {
