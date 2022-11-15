@@ -1,4 +1,4 @@
-require("dotenv").config();
+const dotenv = require('dotenv');
 const express = require("express");
 const cors = require('cors');
 const app = express();
@@ -10,11 +10,7 @@ const {createTokens, validateToken} = require('./JWT');
 const { v4: uuidv4 } = require('uuid');
 const { current } = require("@reduxjs/toolkit");
 
-
-const dbInfo = {
-    username: process.env.user,
-    password: process.env.password
-}
+dotenv.config();
 
 app.use(cors({
     origin: "*",
@@ -23,7 +19,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-mongoose.connect(`mongodb+srv://${dbInfo.username}:${dbInfo.password}@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority`)
 
 app.get("/getUsers", (req, res) => {
     Users.find({}, (err, result) => {
