@@ -20,6 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority`)
+console.log(process.env.MONGO_USERNAME, process.env.MONGO_PASSWORD);
 
 app.get("/getUsers", (req, res) => {
     Users.find({}, (err, result) => {
@@ -31,7 +32,7 @@ app.get("/getUsers", (req, res) => {
     })
 })
 
-console.log(dbInfo.username, dbInfo.password)
+
 app.get('/user/:id', function(req, res){
     Users.findById(req.params.id)
     .then(userFound => {
