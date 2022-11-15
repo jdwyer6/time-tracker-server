@@ -16,12 +16,6 @@ const dbInfo = {
     password: process.env.password
 }
 
-// app.use(function(req, res, next){
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-Width, Content-Type, Accept");
-//     next();
-// });
-
 app.use(cors({
     origin: "*",
     credentials: true
@@ -29,7 +23,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-mongoose.connect(`mongodb+srv://jdwyer6:hpYOr45SNY9s8jxq@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://${dbInfo.username}:${dbInfo.password}@cluster0.sv4ojpk.mongodb.net/time-tracker-data?retryWrites=true&w=majority`)
 
 app.get("/getUsers", (req, res) => {
     Users.find({}, (err, result) => {
@@ -112,22 +106,6 @@ app.put('/user/:id', function(req, res, next){
     })
 })
 
-// app.post('/user/:id/:lastLoggedInfo', function(req, res, next){
-//     Users.findById(req.params.id)
-//     .then(user => {
-//         user.lastLoggedInfo = req.params.lastLoggedInfo
-//         user.save();
-//         res.statusCode=200;
-//         res.setHeader('Content-Type', 'application/json');
-//         res.json(user)
-//     })
-//     .catch((err) => {
-//         if(err){
-//             res.status(400).json({error: err});
-//         }
-//     })
-// })
-
 
 app.post('/user/:id/:status', function(req, res, next){
     Users.findById(req.params.id)
@@ -188,7 +166,7 @@ app.post("/register", (req, res) => {
     })
 });
 
-app.post("/login", async (req, res, next) => {
+app.post("/login", async (req, res) => {
     const {username, password} = req.body;
     try{
         const user = await Users.findOne({username: username})
@@ -318,7 +296,6 @@ app.post('/updateEmployee/:id', function(req, res, next) {
 
 app.get("/profile", validateToken, (req, res) => {
     res.json("profile");
-    // res.render('../src/pages/DemoPage.js', {status: 'good'})
 })
 
 
