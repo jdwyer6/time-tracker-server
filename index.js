@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const {createTokens, validateToken} = require('./JWT');
 const { v4: uuidv4 } = require('uuid');
 const { current } = require("@reduxjs/toolkit");
-var millisecondsToHours = require('date-fns/millisecondsToHours')
+var secondsToHours = require('date-fns/secondsToHours')
 
 
 const dbInfo = {
@@ -121,16 +121,23 @@ app.put('/user/:id/:entry', function(req, res, next){
                 user.hours[entry].endTime = data.end
                 user.hours[entry].end = data.endUnix
             }
-            user.hours[entry].hoursWorked = (((user.hours[entry].end - user.hours[entry].start)/3600000).toFixed(3))
-            // console.log(user.hours[entry].end, ' - ', user.hours[entry].start)
+            // user.hours[entry].hoursWorked = millisecondsToHours((user.hours[entry].end - user.hours[entry].start))
+            console.log('First: ', user.hours[entry].end, user.hours[entry].start)
             user.markModified('hours')
             user.save()
             .then(user =>{
+                console.log('Second: ', secondsToHours((user.hours[entry].end - user.hours[entry].start)))
+                user.hours[entry].hoursWorked = secondsToHours((user.hours[entry].end - user.hours[entry].start))
+                user.markModified('hours')
+                user.save()
+                .then(user =>{
                 
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.json(user)
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(user)
+                })
             })
+
         }else{
             err = new Error(`Could not update the employee with id${req.params.id}`)
             err.status = 404;
