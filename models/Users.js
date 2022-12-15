@@ -1,25 +1,5 @@
 const mongoose = require('mongoose');
 
-// const EmployeeSchema = new mongoose.Schema({
-//     employeeId:{
-//         type: String
-//     },
-//     name: {
-//         type: String,
-//     },
-//     pin: {
-//         type: String,
-//         required: true
-//     },
-//     img: {
-//         data: Buffer,
-//         type: Array
-//     },
-//     work: {
-//         type: Array
-//     }
-// })
-
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
