@@ -9,11 +9,12 @@ const cookieParser = require("cookie-parser");
 const {createTokens, validateToken} = require('./JWT');
 const { v4: uuidv4 } = require('uuid');
 const { current } = require("@reduxjs/toolkit");
+var millisecondsToHours = require('date-fns/millisecondsToHours')
 
 
 const dbInfo = {
-    username: process.env.user,
-    password: process.env.password
+    username: process.env.MONGO_USERNAME,
+    password: process.env.MONGO_PASSWORD
 }
 
 app.use(cors({
@@ -79,7 +80,6 @@ app.post('/user/:id', function(req, res, next){
 
 app.put('/user/:id', function(req, res, next){
     const data = req.body.data;
-
     Users.findById(req.params.id)
     .then(user => {
         if(user){
@@ -102,6 +102,46 @@ app.put('/user/:id', function(req, res, next){
     .catch((err) => {
         if(err){
             res.status(400).json({error: err});
+        }
+    })
+})
+
+//Edit Hours Entry
+app.put('/user/:id/:entry', function(req, res, next){
+    const data = req.body.data
+    const entry = req.params.entry
+    Users.findById(req.params.id)
+    .then(user=>{
+        if(user){
+            if(data.start){
+                user.hours[entry].startTime = data.start
+                user.hours[entry].start = data.startUnix
+            }
+            if(data.end){
+                user.hours[entry].endTime = data.end
+                user.hours[entry].end = data.endUnix
+            }
+            user.hours[entry].hoursWorked = (((user.hours[entry].end - user.hours[entry].start)/3600000).toFixed(3))
+            // console.log(user.hours[entry].end, ' - ', user.hours[entry].start)
+            user.markModified('hours')
+            user.save()
+            .then(user =>{
+                
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user)
+            })
+        }else{
+            err = new Error(`Could not update the employee with id${req.params.id}`)
+            err.status = 404;
+            return next(err)
+        }
+        
+    })
+    .catch((err)=>{
+        if(err){
+            console.log(err)
+            res.status(400).json({error: err})
         }
     })
 })
