@@ -106,28 +106,30 @@ app.put('/user/:id', function(req, res, next){
     })
 })
 
-//Edit Hours Entry
-app.put('/user/:id/:entry', function(req, res, next){
+//Edit hours entry
+app.put('/user/:id/:jobId', function(req, res, next){
     const data = req.body.data
-    const entry = req.params.entry
+    const jobId = req.params.jobId
     Users.findById(req.params.id)
     .then(user=>{
+        const entry = user.hours.filter(entry => entry.jobId === jobId)[0]
+        console.log(entry)
         if(user){
             if(data.start){
-                user.hours[entry].startTime = data.start
-                user.hours[entry].start = data.startUnix
+                entry.startTime = data.start
+                entry.start = data.startUnix
             }
             if(data.end){
-                user.hours[entry].endTime = data.end
-                user.hours[entry].end = data.endUnix
+                entry.endTime = data.end
+                entry.end = data.endUnix
             }
-            // user.hours[entry].hoursWorked = millisecondsToHours((user.hours[entry].end - user.hours[entry].start))
-            console.log('First: ', user.hours[entry].end, user.hours[entry].start)
+            // entry.hoursWorked = millisecondsToHours((entry.end - entry.start))
+            console.log('First: ', entry.end, entry.start)
             user.markModified('hours')
             user.save()
             .then(user =>{
-                console.log('Second: ', secondsToHours((user.hours[entry].end - user.hours[entry].start)))
-                user.hours[entry].hoursWorked = secondsToHours((user.hours[entry].end - user.hours[entry].start))
+                console.log('Second: ', secondsToHours((entry.end - entry.start)))
+                entry.hoursWorked = secondsToHours((entry.end - entry.start))
                 user.markModified('hours')
                 user.save()
                 .then(user =>{
