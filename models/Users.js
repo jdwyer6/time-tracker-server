@@ -40,6 +40,9 @@ const UserSchema = new mongoose.Schema({
     },
     position: {
         type: String
+    },
+    wage: {
+        type: Number
     }
 },{
     timestamps: true

@@ -114,7 +114,6 @@ app.put('/user/:id/:jobId', function(req, res, next){
     Users.findById(req.params.id)
     .then(user=>{
         const entry = user.hours.filter(entry => entry.jobId === jobId)[0]
-        console.log(entry)
         if(user){
             if(data.start){
                 entry.startTime = data.start
@@ -124,17 +123,13 @@ app.put('/user/:id/:jobId', function(req, res, next){
                 entry.endTime = data.end
                 entry.end = data.endUnix
             }
-            // entry.hoursWorked = millisecondsToHours((entry.end - entry.start))
-            console.log('First: ', entry.end, entry.start)
             user.markModified('hours')
             user.save()
             .then(user =>{
-                console.log('Second: ', secondsToHours((entry.end - entry.start)))
                 entry.hoursWorked = secondsToHours((entry.end - entry.start))
                 user.markModified('hours')
                 user.save()
                 .then(user =>{
-                
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
                     res.json(user)
@@ -156,6 +151,44 @@ app.put('/user/:id/:jobId', function(req, res, next){
     })
 })
 
+app.put('/update/:id', function(req, res, next){
+    const data = req.body.data
+    console.log(data)
+    Users.findById(req.params.id)
+    .then(user =>{
+        if(user){
+            if(data.name){
+                user.name = data.name
+            }
+            if(data.position){
+                user.position = data.position
+            }
+            if(data.wage){
+                user.wage = data.wage
+            }   
+            if(data.admin){
+                data.admin === 'on' ? user.admin = true : user.admin = false;
+            }
+            user.save()
+            .then(user => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user)
+            })
+        }else{
+            console.log('error')
+            err = new Error(`Could not update the employee with id${req.params.id}`)
+            err.status = 404;
+            return next(err)
+        }
+    })
+    .catch((err)=>{
+        if(err){
+            console.log(err)
+            res.status(400).json({error: err})
+        }
+    })
+})
 
 app.post('/user/:id/:status', function(req, res, next){
     Users.findById(req.params.id)
