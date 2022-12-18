@@ -321,13 +321,14 @@ app.get('/employee/:id/:employeeId', function(req, res){
 })
 
 //Delete Hours
-app.delete('/:businessId/:employeeId', (req, res) => {
-    const {idx} = req.body;
-    Users.findById(req.params.businessId)
+app.delete('/user/:id/:jobId', (req, res) => {
+    const {jobId} = req.params.jobId;
+    Users.findById(req.params.id)
     .then(user => {
-        const currentEmployee = user.employees.find(employee => employee.employeeId == req.params.employeeId)
+        console.log(user)
         if(user){
-            currentEmployee.work.splice(idx, 1);
+            const idx = user.hours.findIndex(entry => entry.jobId === jobId)
+            user.hours.splice(idx, 1)
             user.save()
             .then(user => {
                 res.statusCode = 200;
